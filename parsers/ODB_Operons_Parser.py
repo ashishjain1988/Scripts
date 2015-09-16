@@ -168,8 +168,8 @@ def regulon_db(outfolder, number_of_genes, url, download, experimantal, outfile)
     handle.write('\n'.join(['\t'.join(i) for i in result]))
     handle.close()
 
-def ODB_Operons(outfolder, number_of_genes, url, download, experimantal, outfile):
-    url_outfile = outfolder +"OperonSet.txt"
+def ProOpDB_Operons(outfolder, number_of_genes, url, download, experimantal, outfile):
+    url_outfile = outfolder +"B.Subtilis_Operons_ProOpDB.txt"
     operons_gene_dict = {}
     filtered_operon_gene_list = {}
     for line in [i.strip() for i in open(url_outfile).readlines()]:
@@ -188,6 +188,19 @@ def ODB_Operons(outfolder, number_of_genes, url, download, experimantal, outfile
     handle = open(outfile, 'w')
     for operon,geneList in enumerate(filtered_operon_gene_list):
         handle.write('\n'.join(operon.join(['\t'.join(i) for i in geneList])))
+    handle.close()
+    
+def ODB_Operons(outfolder, number_of_genes, url, download, experimantal, outfile):
+    url_outfile = outfolder +"known_operon.download_ODB.txt"
+    result = [];
+    for line in [i.strip() for i in open(url_outfile).readlines()]:
+        lineData = line.split("\t")
+        operonName = lineData[0]
+        geneNames = lineData[2]
+        if(len(geneNames.split(",")) >= 5):
+            result.append([operonName] + geneNames.split(','))
+    handle = open(outfile, 'w')
+    handle.write('\n'.join(['\t'.join(i) for i in result]))
     handle.close()
     
 # This function creates a dictionary indexed by locus from the input genbank file
@@ -283,7 +296,8 @@ def parse_regulonDB_file_and_store_results(outfolder, min_genes, url, download, 
     if download:
         #print "Download"
         #regulon_db(outfile, min_genes, url, download, experimental_only)
-        regulon_db(outfolder, min_genes, url, download, experimental_only, unfiltered_regulong_parsed_file)
+        #regulon_db(outfolder, min_genes, url, download, experimental_only, unfiltered_regulong_parsed_file)
+        ProOpDB_Operons(outfolder, min_genes, url, download, experimental_only, unfiltered_regulong_parsed_file)
     
     protein_only_list = []
     mixed_list = [] # this is a list that contains gene blocks that contain both protein coding and RNA coding genes
