@@ -1,4 +1,4 @@
- #!/usr/bin/python
+#!/usr/bin/python
 
 import time
 import os
@@ -171,23 +171,33 @@ def regulon_db(outfolder, number_of_genes, url, download, experimantal, outfile)
 def ProOpDB_Operons(outfolder, number_of_genes, url, download, experimantal, outfile):
     url_outfile = outfolder +"B.Subtilis_Operons_ProOpDB.txt"
     operons_gene_dict = {}
+    locus_operon_map = {}
     filtered_operon_gene_list = {}
     for line in [i.strip() for i in open(url_outfile).readlines()]:
-        lineData = line.split("\t")
-        operonId = lineData[0]
-        geneName = lineData[1]
-        if(operons_gene_dict.has_key(operonId)):
-            geneList = operons_gene_dict[operonId]
-            geneList.append(geneName);
-        else:
-            geneList = [geneName]
-        operons_gene_dict.update({operonId:geneList})
-    for operon,geneList in enumerate(operons_gene_dict):
-        if(len(geneList) >=5):
+        if(not (line.strip() is "")):
+            lineData = line.split("\t")
+            operonId = lineData[0]
+            geneName = lineData[1]
+            locusName = lineData[2]
+            if(not (locus_operon_map.has_key(operonId))):
+                locus_operon_map.update({operonId:"bsu-"+locusName})
+            if(operons_gene_dict.has_key(operonId)):
+                geneList = operons_gene_dict[operonId]
+                geneList.append(geneName);
+            else:
+                geneList = [geneName]
+            operons_gene_dict.update({operonId:geneList})
+    for operon,geneList in operons_gene_dict.iteritems():
+        if(len(geneList) >= number_of_genes):
             filtered_operon_gene_list.update({operon:geneList})
     handle = open(outfile, 'w')
-    for operon,geneList in enumerate(filtered_operon_gene_list):
-        handle.write('\n'.join(operon.join(['\t'.join(i) for i in geneList])))
+    for operon,geneList in filtered_operon_gene_list.iteritems():
+        #print locus_operon_map[operon];
+        s = ""
+        geneList.insert(0, locus_operon_map[operon]);
+        #print geneList
+        s = '\t'.join([i for i in geneList])
+        handle.write(s+"\n")
     handle.close()
     
 def ODB_Operons(outfolder, number_of_genes, url, download, experimantal, outfile):
@@ -298,6 +308,7 @@ def parse_regulonDB_file_and_store_results(outfolder, min_genes, url, download, 
         #regulon_db(outfile, min_genes, url, download, experimental_only)
         #regulon_db(outfolder, min_genes, url, download, experimental_only, unfiltered_regulong_parsed_file)
         ProOpDB_Operons(outfolder, min_genes, url, download, experimental_only, unfiltered_regulong_parsed_file)
+        #ODB_Operons(outfolder, min_genes, url, download, experimental_only, unfiltered_regulong_parsed_file)
     
     protein_only_list = []
     mixed_list = [] # this is a list that contains gene blocks that contain both protein coding and RNA coding genes
@@ -432,7 +443,6 @@ def main():
     else:
         filter_list = [i.strip() for i in open(filter_file).readlines()]
         genbank_list = [i for i in returnRecursiveDirFiles(infolder) if i.split('/')[-1].split('.')[0] in filter_list]
-
     pool = Pool(processes = num_proc)
     organism_dict_for_recovery = dict(pool.map(parallel_genome_dict, genbank_list))
 
