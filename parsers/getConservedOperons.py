@@ -13,11 +13,13 @@ def getConservedOperonsList(pickleObj):
     #print pickleObj.keys()[0]
     #print pickleObj[pickleObj.keys()[1]]
     operonDistanceDict = {}
+    operonKeysDict = {}
     for operon in pickleObj.keys():#operon
         orgDistanceDict = pickleObj[operon]
         deletion = 0
         duplications = 0
         splits = 0
+        operonKeysDict.update({operon:len(pickleObj[operon].keys())})
         for orgs in orgDistanceDict.keys():#one org
             specieDistance = orgDistanceDict[orgs]
             for org in specieDistance.keys():
@@ -33,12 +35,18 @@ def getConservedOperonsList(pickleObj):
         for event,value in operonDistanceDict[operon].iteritems():
             distance +=value
         operonTotalDistDict.update({operon:distance})
+    handle = open("conservedOperonsSorted.txt","w")
     for operon in sorted(operonTotalDistDict.items(), key=lambda x: x[1]):
-        print operon
+        #print operon
+        if(operonKeysDict[operon[0]] >=5):
+            print operonKeysDict[operon[0]]
+            handle.write(str(operon))
+            handle.write("\n")
+    handle.close()
 
 def main():
     #print "Main"
-    event_dist = pickle.load(open("/home/jain/Downloads/ProOpDB/test_run_BSub2/gene_block_distance_matrices/event_dict.p"))
+    event_dist = pickle.load(open("/home/jain/Gram_Positive_Bacteria_Study/Test_Run/gene_block_distance_matrices/event_dict.p"))
     getConservedOperonsList(event_dist)
 
 if __name__ == "__main__":
