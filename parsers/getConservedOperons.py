@@ -35,18 +35,18 @@ def getConservedOperonsList(pickleObj):
         no_of_orgs = operonKeysDict[operon]
         for event,value in operonDistanceDict[operon].iteritems():
             distance +=value
-        operonTotalDistDict.update({operon:(distance*1.0/no_of_orgs)})
+        operonTotalDistDict.update({operon:(distance*1.0/(no_of_orgs*no_of_orgs))})
     handle = open("conservedOperonsSorted.txt","w")
     for operon in sorted(operonTotalDistDict.items(), key=lambda x: x[1]):
         #print operon
-        if(operonKeysDict[operon[0]] >=5):
+        if(operonKeysDict[operon[0]] >=50):
             handle.write(str(operon))
             handle.write("\n")
     handle.close()
 
 def main():
     #print "Main"
-    event_dist = pickle.load(open("/home/jain/Gram_Positive_Bacteria_Study/Test_Run_Test/gene_block_distance_matrices/event_dict.p"))
+    event_dist = pickle.load(open("/home/jain/Gram_Positive_Bacteria_Study/Organisms_Lists_from_PATRIC/Bacillus/Run/gene_block_distance_matrices/event_dict.p"))
     getConservedOperonsList(event_dist)
 
 if __name__ == "__main__":
