@@ -44,13 +44,21 @@ def make_common_to_accession_dict(infolder):
     for key,value in common_to_accession_dict.iteritems():
         file.write(value+"\n");
     file.close()
-   
+    
+def creating_filter_list(infolder):
+    files = return_file_list(infolder)
+    filterFile = open("filter.txt","w")
+    for file in files:
+        filterFile.write(file.split("/")[6].split(".")[0])
+        filterFile.write("\n")
+    filterFile.close()
+
 def main():
     genomesPath = "/home/jain/Gram_Positive_Bacteria_Study/Gram_Positive_Bacteria_Genomes"
     filteredGenomes = "/home/jain/workspace/Scipts/et2/NodeName.txt"
     list_of_genomes = return_recursive_dir_files(genomesPath)
     fullGenomesList = []
-    make_common_to_accession_dict(genomesPath)
+    #make_common_to_accession_dict(genomesPath)
     for line in open(filteredGenomes):
         #print line
         for i in list_of_genomes:
@@ -60,6 +68,7 @@ def main():
             
     for i in fullGenomesList:
         print i
+    creating_filter_list("/home/jain/Gram_Positive_Bacteria_Study/Bacillus_Genomes_Path/")
         
 if __name__ == "__main__":
     main()
