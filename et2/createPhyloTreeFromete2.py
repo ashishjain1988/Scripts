@@ -7,7 +7,6 @@ mpl.use('Agg')
 import matplotlib.pyplot as plt
 from matplotlib.colors import LinearSegmentedColormap
 import matplotlib.cbook as cbook
-from matplotlib._png import read_png
 from matplotlib.offsetbox import OffsetImage 
 import matplotlib.gridspec as gridspec
 import matplotlib.image as mpimg
@@ -38,8 +37,8 @@ def drawete2PhylTree(treeFilePath):
     #treeStyle.margin_bottom = 0
     #treeStyle.tree_width = treeWidth
     no_of_nodes = countNodes(tree)
-    treeStyle.scale = finalImageHeightinMM/no_of_nodes
-    treeStyle.branch_vertical_margin = finalImageHeightinMM/no_of_nodes
+    treeStyle.scale = 120#finalImageHeightinMM/no_of_nodes
+    treeStyle.branch_vertical_margin = 10#finalImageHeightinMM/no_of_nodes
     #treeStyle.draw_aligned_faces_as_table = False
     tree = changeNodeStyle(tree)
     #tree.img_style["size"] = 30
@@ -51,6 +50,15 @@ def countNodes(tree):
     for n in tree.traverse():
         count += 1
     return count
+
+def printNodeNames(treeFilePath):
+    tree = Tree(treeFilePath)
+    file = open("NodeName.txt","w")
+    for n in tree.traverse():
+        file.write(n.name)
+        file.write("\n")
+        
+    file.close()
 
 def changeNodeStyle(tree):
     # Draws nodes as small red spheres of diameter equal to 10 pixels
@@ -67,8 +75,9 @@ def changeNodeStyle(tree):
     return tree
 
 def main():
-    drawete2PhylTree("/home/jain/Downloads/ProOpDB/test_run_BSub2/tree/out_tree.nwk")
-
+    #drawete2PhylTree("/home/jain/Downloads/ProOpDB/test_run_BSub2/tree/out_tree.nwk")
+    drawete2PhylTree("/home/jain/Downloads/NewSubtree.nwk")
+    printNodeNames("/home/jain/Downloads/NewSubtree.nwk")
 
 if __name__ == "__main__":
     main()
