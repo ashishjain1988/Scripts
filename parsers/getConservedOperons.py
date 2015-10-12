@@ -9,6 +9,8 @@ import ntpath
 import pickle
 from gc import disable
 
+
+PATH = "/home/jain/Gram_Positive_Bacteria_Study/Organisms_Lists_from_PATRIC/Bacteroidetes/Run_filter_E-Value_1e-10/"
 def getConservedOperonsList(pickleObj):
     #print pickleObj.keys()[0]
     #print pickleObj[pickleObj.keys()[1]]
@@ -45,7 +47,7 @@ def getConservedOperonsList(pickleObj):
             operonTotalConsDict.update({operon:0})
             operonEventConsDict.update({operon:{'deletions':0,'splits':0,'duplications':0}}) 
         
-    handle = open("/home/jain/Gram_Positive_Bacteria_Study/Organisms_Lists_from_PATRIC/Firmicutes/Run_Filter_PDA/conservedOperonsSorted.txt","w")
+    handle = open(PATH+"conservedOperonsSorted.txt","w")
     handle.write("Operon Name\tTotal C.Score\tDeletion C.Score\tSplits C.Score\tDuplications C.Score\n")
     for operon in sorted(operonTotalConsDict.items(), key=lambda x: x[1]):
         if(operonKeysDict[operon[0]] >=30):
@@ -56,7 +58,7 @@ def getConservedOperonsList(pickleObj):
 
 def main():
     #print "Main"
-    event_dist = pickle.load(open("/home/jain/Gram_Positive_Bacteria_Study/Organisms_Lists_from_PATRIC/Firmicutes/Run_Filter_PDA/gene_block_distance_matrices/event_dict.p"))
+    event_dist = pickle.load(open(PATH+"gene_block_distance_matrices/event_dict.p"))
     getConservedOperonsList(event_dist)
 
 if __name__ == "__main__":
