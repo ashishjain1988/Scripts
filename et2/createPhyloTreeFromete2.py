@@ -59,6 +59,16 @@ def printNodeNames(treeFilePath):
         file.write("\n")
         
     file.close()
+    
+def printAccessionNumbers(filePath):
+    f = open(filePath,"r")
+    o = open("accession.txt","w")
+    for line in f:
+        #lineSplit = line.split("_")
+        o.write('_'.join(line.split('_')[2:]))
+        o.write("\n")
+    o.close()
+    f.close()
 
 def changeNodeStyle(tree):
     # Draws nodes as small red spheres of diameter equal to 10 pixels
@@ -74,10 +84,29 @@ def changeNodeStyle(tree):
         n.set_style(nstyle)
     return tree
 
+def checkForSameStrain(filePath):
+    f = open(filePath,"r")
+    o = open("accession.txt","w")
+    list = []
+    for line in f:
+        #lineSplit = line.split("_")
+        org = '_'.join(line.split('_')[:2])
+        #print org
+        try:
+            if(list.index(org) >= 0):
+                print org
+        except:
+            list.append(org)
+            #print org
+    o.close()
+    f.close()
+
 def main():
     #drawete2PhylTree("/home/jain/Downloads/ProOpDB/test_run_BSub2/tree/out_tree.nwk")
-    drawete2PhylTree("/home/jain/Downloads/NewSubtree.nwk")
-    printNodeNames("/home/jain/Downloads/NewSubtree.nwk")
+    #drawete2PhylTree("/home/jain/Downloads/NewSubtree.nwk")
+    #printNodeNames("/home/jain/Gram_Positive_Bacteria_Study/Organisms_Lists_from_PATRIC/Proteobacteria/40_Org_tree.nwk")
+    #printAccessionNumbers("/home/jain/Gram_Positive_Bacteria_Study/Organisms_Lists_from_PATRIC/Proteobacteria/40_Org_tree.txt")
+    checkForSameStrain("/home/jain/Gram_Positive_Bacteria_Study/Organisms_Lists_from_PATRIC/Proteobacteria/40_Org_tree.txt")
 
 if __name__ == "__main__":
     main()
