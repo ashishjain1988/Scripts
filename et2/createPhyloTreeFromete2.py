@@ -24,6 +24,8 @@ from matplotlib.colors import ColorConverter
 from reportlab.lib import colors
 from ete2 import Tree, TreeStyle, NodeStyle
 import re
+from Bio import SeqIO,SeqFeature
+from Bio.SeqRecord import SeqRecord
 
 finalImageHeightinMM = 2880
 treeWidth = 1536
@@ -72,32 +74,34 @@ def printAccessionNumbers(filePath):
     f.close()
     
 def printAccessionNumbersFromName(filePath,dbFolderPath):
-    f = open(filePath,"r")
+    file = open(filePath,"r")
     o = open("accession.txt","w")
     org = []
     accessions = []
-    for line in f:
-        org.append(line.strip())
+    for line in file:
+        org.append('_'.join(line.split("_")[:2]))
     for dir in return_recursive_dir_files(dbFolderPath):
         dirSplit = dir.split("/")
-        #print dirSplit[len(dirSplit)-1].split(" ")
-        organism_tmp = dirSplit[len(dirSplit)-1]
-        organism_tmp_1 = re.sub('[\[\]]', "", organism_tmp)
-        orgName = '_'.join(organism_tmp_1.split('_')[:2])
-        #orgName = '_'.join(dirSplit[len(dirSplit)-1].split("_")[:2])
-        #print orgName
+        organism = ""
+        accession = ""
+        for f in return_recursive_files(dir):
+            #print f
+            seq_record = SeqIO.parse(open(f), "genbank").next()
+            accession = seq_record.annotations['accessions'][0]
+            organism_tmp = seq_record.annotations['organism'].replace(' ', '_')
+            organism_tmp_1 = re.sub('[\[\]]', "", organism_tmp)
+            organism = '_'.join(organism_tmp_1.split('_')[:2])#+"_"+accession
+        print organism
         try:
-            if(org.index(orgName) >= 0):
-                genFiles = return_recursive_files(dir);
-                #print genFiles
-                #print os.path.basename(genFiles[0])
-                accessions.append(os.path.basename(genFiles[0]))
+            if(org.index(organism) >= 0):
+                accessions.append(accession)
         except:
-            print "none"
+            #print "none"
+            pass
     for accesion in accessions:
         o.write(accesion+"\n")            
     o.close()
-    f.close()
+    file.close()
     
 def return_recursive_dir_files(root_dir):
     result = []
