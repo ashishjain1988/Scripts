@@ -79,7 +79,9 @@ def printAccessionNumbersFromName(filePath,dbFolderPath):
     org = []
     accessions = []
     for line in file:
-        org.append('_'.join(line.split("_")[:2]))
+        temp = '_'.join(line.split("_")[:2])
+        org.append(temp.strip())
+    print org
     for dir in return_recursive_dir_files(dbFolderPath):
         dirSplit = dir.split("/")
         organism = ""
@@ -140,7 +142,7 @@ def main():
     #drawete2PhylTree("/home/jain/Downloads/NewSubtree.nwk")
     #printNodeNames("/home/jain/Gram_Positive_Bacteria_Study/Organisms_Lists_from_PATRIC/Proteobacteria/40_Org_tree.nwk")
     #printAccessionNumbers("/home/jain/Gram_Positive_Bacteria_Study/Organisms_Lists_from_PATRIC/Proteobacteria/analysis_after_strain_filtering/40_Org_tree.txt")
-    printAccessionNumbersFromName("/home/jain/Gram_Positive_Bacteria_Study/Organisms_Lists_from_PATRIC/Proteobacteria/analysis_after_strain_filtering/40_Org_tree.txt", "/home/jain/Gram_Positive_Bacteria_Study/Proteobacteria_Genomes_Path_1/")
+    printAccessionNumbersFromName("/home/jain/Gram_Positive_Bacteria_Study/Organisms_Lists_from_PATRIC/Firmicutes/analysis_after_filtering_strain/40_Orgs_Tree.txt", "/home/jain/Gram_Positive_Bacteria_Study/Firmicutes_Genomes_Path_1")
     #checkForSameStrain("/home/jain/Gram_Positive_Bacteria_Study/Organisms_Lists_from_PATRIC/Proteobacteria/analysis_after_strain_filtering/newOrgListAfterStrainFiltering.txt")
 
 if __name__ == "__main__":
