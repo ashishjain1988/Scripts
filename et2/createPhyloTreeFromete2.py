@@ -23,6 +23,7 @@ import pickle
 from matplotlib.colors import ColorConverter
 from reportlab.lib import colors
 from ete2 import Tree, TreeStyle, NodeStyle
+import re
 
 finalImageHeightinMM = 2880
 treeWidth = 1536
@@ -69,6 +70,52 @@ def printAccessionNumbers(filePath):
         o.write("\n")
     o.close()
     f.close()
+    
+def printAccessionNumbersFromName(filePath,dbFolderPath):
+    f = open(filePath,"r")
+    o = open("accession.txt","w")
+    org = []
+    accessions = []
+    for line in f:
+        org.append(line.strip())
+    for dir in return_recursive_dir_files(dbFolderPath):
+        dirSplit = dir.split("/")
+        #print dirSplit[len(dirSplit)-1].split(" ")
+        organism_tmp = dirSplit[len(dirSplit)-1]
+        organism_tmp_1 = re.sub('[\[\]]', "", organism_tmp)
+        orgName = '_'.join(organism_tmp_1.split('_')[:2])
+        #orgName = '_'.join(dirSplit[len(dirSplit)-1].split("_")[:2])
+        #print orgName
+        try:
+            if(org.index(orgName) >= 0):
+                genFiles = return_recursive_files(dir);
+                #print genFiles
+                #print os.path.basename(genFiles[0])
+                accessions.append(os.path.basename(genFiles[0]))
+        except:
+            print "none"
+    for accesion in accessions:
+        o.write(accesion+"\n")            
+    o.close()
+    f.close()
+    
+def return_recursive_dir_files(root_dir):
+    result = []
+    for path, dir_name, flist in os.walk(root_dir):
+        for f in dir_name:
+            fname = os.path.join(path, f)
+            if os.path.isdir(fname):
+                result.append(fname)
+    return result
+
+def return_recursive_files(root_dir):
+    result = []
+    for path, dir_name, flist in os.walk(root_dir):
+        for f in flist:
+            fname = os.path.join(path, f)
+            if not os.path.isdir(fname):
+                result.append(fname)
+    return result
 
 def changeNodeStyle(tree):
     # Draws nodes as small red spheres of diameter equal to 10 pixels
@@ -84,29 +131,13 @@ def changeNodeStyle(tree):
         n.set_style(nstyle)
     return tree
 
-def checkForSameStrain(filePath):
-    f = open(filePath,"r")
-    o = open("accession.txt","w")
-    list = []
-    for line in f:
-        #lineSplit = line.split("_")
-        org = '_'.join(line.split('_')[:2])
-        #print org
-        try:
-            if(list.index(org) >= 0):
-                print org
-        except:
-            list.append(org)
-            #print org
-    o.close()
-    f.close()
-
 def main():
     #drawete2PhylTree("/home/jain/Downloads/ProOpDB/test_run_BSub2/tree/out_tree.nwk")
     #drawete2PhylTree("/home/jain/Downloads/NewSubtree.nwk")
     #printNodeNames("/home/jain/Gram_Positive_Bacteria_Study/Organisms_Lists_from_PATRIC/Proteobacteria/40_Org_tree.nwk")
-    #printAccessionNumbers("/home/jain/Gram_Positive_Bacteria_Study/Organisms_Lists_from_PATRIC/Proteobacteria/40_Org_tree.txt")
-    checkForSameStrain("/home/jain/Gram_Positive_Bacteria_Study/Organisms_Lists_from_PATRIC/Proteobacteria/40_Org_tree.txt")
+    #printAccessionNumbers("/home/jain/Gram_Positive_Bacteria_Study/Organisms_Lists_from_PATRIC/Proteobacteria/analysis_after_strain_filtering/40_Org_tree.txt")
+    printAccessionNumbersFromName("/home/jain/Gram_Positive_Bacteria_Study/Organisms_Lists_from_PATRIC/Proteobacteria/analysis_after_strain_filtering/40_Org_tree.txt", "/home/jain/Gram_Positive_Bacteria_Study/Proteobacteria_Genomes_Path_1/")
+    #checkForSameStrain("/home/jain/Gram_Positive_Bacteria_Study/Organisms_Lists_from_PATRIC/Proteobacteria/analysis_after_strain_filtering/newOrgListAfterStrainFiltering.txt")
 
 if __name__ == "__main__":
     main()
