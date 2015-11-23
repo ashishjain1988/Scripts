@@ -6,15 +6,15 @@ import plotly.tools as tls
 
 tls.set_credentials_file(username='ashishjain1988', api_key='uyc6qh7frd')
 
-#x = ['E9.5 Male', 'E9.5 Female', 'E9.5 TGC', 'In Vitro TGC', 'E7.5 Whole', 'E9.5 Whole', 'E14.5 Whole', 'In Vitro TSC']
-#y = ['In Vitro TSC', 'E14.5 Whole','E9.5 Whole', 'E7.5 Whole', 'In Vitro TGC', 'E9.5 TGC', 'E9.5 Female', 'E9.5 Male']
+x = ['E9.5 Male', 'E9.5 Female', 'E9.5 TGC', 'In Vitro TGC', 'E7.5 Whole', 'E9.5 Whole', 'E14.5 Whole', 'In Vitro TSC']
+y = ['In Vitro TSC', 'E14.5 Whole','E9.5 Whole', 'E7.5 Whole', 'In Vitro TGC', 'E9.5 TGC', 'E9.5 Female', 'E9.5 Male']
 
-x = ['In Vivo Mouse E9.5', 'e9.5_TGC_male_3seq', 'e9.5_TGC_female_3seq']
-y = ['e9.5_TGC_female_3seq', 'e9.5_TGC_male_3seq', 'In Vivo Mouse E9.5']
+#x = ['In Vivo Mouse E9.5', 'e9.5_TGC_male_3seq', 'e9.5_TGC_female_3seq']
+#y = ['e9.5_TGC_female_3seq', 'e9.5_TGC_male_3seq', 'In Vivo Mouse E9.5']
 
 
 #       x0    x1    x2    x3    x4
-z1 = [[0.00, 0.00, 0.75, 0.75, 0.00,0.00,0.00,0.00],  # y0
+z = [[0.00, 0.00, 0.75, 0.75, 0.00,0.00,0.00,0.00],  # y0
      [0.00, 0.00, 0.75, 0.75, 0.00,0.00,0.00,0.00],  # y1
      [0.75, 0.75, 0.00, 0.75, 0.75,0.00,0.00,0.00],  # y2
      [0.00, 0.00, 0.00, 0.00, 0.00,0.00,0.00,0.00],
@@ -24,7 +24,7 @@ z1 = [[0.00, 0.00, 0.75, 0.75, 0.00,0.00,0.00,0.00],  # y0
      [0.00, 0.75, 0.75, 0.75, 0.75,0.00,0.00,0.00]]  # y3
 
 
-z = [[173, 221, 0],  # y0
+z1 = [[173, 221, 0],  # y0
      [6, 0, 36],  # y1
      [0, 5, 13]]
 
@@ -48,13 +48,23 @@ fig = go.Figure(data=[trace])
 fig['layout'].update(
     title="Placenta Genes Highly Expressed",
     annotations=annotations,
-    xaxis=dict(ticks='', side='bottom',tickfont=dict(
+    xaxis=dict(ticks='outside', side='bottom',linecolor = 'black',showline=True,showgrid=True,gridwidth=2,gridcolor='#bdbdbd',
+        tick0=0,
+        dtick=1,
+        ticklen=8,
+        tickwidth=4,
+        tickcolor='#000',tickfont=dict(
             size=10
         )),
     # ticksuffix is a workaround to add a bit of padding
-    yaxis=dict(ticks='',tickfont=dict(
+    yaxis=dict(ticks='outside',ticksuffix='  ',linecolor = 'black',tick0=0,showline=True,showgrid=True,gridwidth=2,gridcolor='#bdbdbd',
+        dtick=1,
+        ticklen=8,
+        tickwidth=4,
+        tickcolor='#000',tickfont=dict(
             size=10
-        )),margin = dict(t=50,r=50,b=100,l=120),
+        )),              
+    margin = dict(t=50,r=50,b=100,l=120),
     width=600,
     height=600,
     autosize=False
