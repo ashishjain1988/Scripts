@@ -5,15 +5,27 @@ import seaborn as sns;
 
 np.random.seed(0)
 sns.set()
-column_labels = list('ABCD')
-row_labels = list('WXYZ')
+#column_labels = list('ABCD')
+#row_labels = list('WXYZ')
 
-x = ['E9.5 Male', 'E9.5 Female', 'E9.5 TGC']
-y = ['E9.5 Male', 'E9.5 Female', 'E9.5 TGC']
+x = ['E9.5 Male', 'E9.5 Female', 'E9.5 TGC', 'In Vitro TGC', 'E7.5 Whole', 'E9.5 Whole', 'E14.5 Whole', 'In Vitro TSC']
+y = ['E9.5 Male', 'E9.5 Female', 'E9.5 TGC', 'In Vitro TGC', 'E7.5 Whole', 'E9.5 Whole', 'E14.5 Whole', 'In Vitro TSC']
+#y = ['In Vitro TSC', 'E14.5 Whole','E9.5 Whole', 'E7.5 Whole', 'In Vitro TGC', 'E9.5 TGC', 'E9.5 Female', 'E9.5 Male']
+
+#x = ['E9.5 Male', 'E9.5 Female', 'E9.5 TGC']
+#y = ['E9.5 Male', 'E9.5 Female', 'E9.5 TGC']
 
 fig, ax = plt.subplots()
+#fig.suptitle('Placenta Equally Expressed Genes', fontsize=20)
+fig.suptitle('Placental Differentially Expressed Genes', fontsize=20)
+#fig.suptitle('Placental DEGs expressed in both studies (HE/LE)', fontsize=20)
+#fig.suptitle('Placental DEGs ON/OFF', fontsize=20)
+#plt.ylabel('Highly Expressed Genes')
+#plt.xlabel('Low Expressed Genes')
+#plt.ylabel('Genes Count ON')
+#plt.xlabel('Genes Count OFF')
 #data = pd.read_csv(open("/home/jain/heatmap_test_data.csv"), index_col=0)
-data = np.genfromtxt('/home/jain/heatmap_test_data.csv', delimiter=',')
+data = np.genfromtxt('/home/jain/Diff_Gene_Exp_Matrix.csv', delimiter=',')
 #ax = sns.heatmap(data, annot=True)
 heatmap = plt.pcolor(data,cmap=plt.cm.Blues, alpha=0.8)
 plt.colorbar(heatmap)
